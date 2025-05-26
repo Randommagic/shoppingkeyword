@@ -4,7 +4,6 @@ import SearchResults from "../components/SearchResults";
 import KeywordStats from "../components/KeywordStats";
 import ErrorModal from "../components/ErrorModal";
 import AiSearchResults from "../components/AiSearchResults";
-import "../styles/App.css";
 import ThreeColumnLayout from "@/components/ThreeColumnLayout";
 
 interface Item {
