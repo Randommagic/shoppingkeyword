@@ -17,6 +17,7 @@ export default function Home() {
   const [results, setResults] = useState<Item[]>([]);
   const [keywords, setKeywords] = useState<Record<string, number>>({});
   const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
   // const [geminiOutput, setGeminiOutput] = useState<string>("");
   // const [geminiLoading, setGeminiLoading] = useState(false);
 
@@ -101,6 +102,7 @@ export default function Home() {
 
   const handleSearch = async (keyword: string) => {
     setError('');
+    setLoading(true);
     try {
       const response = await fetch(`/api/search?query=${encodeURIComponent(keyword)}`);
 
@@ -139,6 +141,8 @@ export default function Home() {
     } catch (err: any) {
       console.error('에러 발생:', err);
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -158,7 +162,7 @@ export default function Home() {
 
   return (
     <div className="App">
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar onSearch={handleSearch} loading={loading} />
 
       {topKeywordsText && (
         <div

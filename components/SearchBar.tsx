@@ -1,15 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface SearchBarProps {
   onSearch: (keyword: string) => void;
+  loading?: boolean;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ onSearch, loading = false }) => {
   const [input, setInput] = useState<string>("");
+
+  useEffect(() => {
+    // CSS 애니메이션 추가
+    const styleId = 'search-loading-animation';
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement("style");
+      style.id = styleId;
+      style.textContent = `
+        @keyframes spin {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (input.trim() !== "") {
+    if (input.trim() !== "" && !loading) {
       onSearch(input);
     }
   };
@@ -24,9 +45,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
           setInput(e.target.value)
         }
         style={styles.input}
+        disabled={loading}
       />
-      <button type="submit" style={styles.button}>
-        🔍
+      <button type="submit" style={styles.button} disabled={loading}>
+        {loading ? (
+          <span style={styles.loading}>🔍</span>
+        ) : (
+          "🔍"
+        )}
       </button>
     </form>
   );
@@ -61,6 +87,14 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontWeight: "bold",
     boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
     transition: "background-color 0.2s",
+    minWidth: "60px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  loading: {
+    display: "inline-block",
+    animation: "spin 1s linear infinite",
   },
 };
 
