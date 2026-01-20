@@ -26,7 +26,7 @@ const FilteredKeywordList: React.FC<Props> = ({ keywords }) => {
   );
 };
 
-function getFilteredKeywords(keywords: Record<string, number>): string[] {
+export function getFilteredKeywords(keywords: Record<string, number>): string[] {
   const uniqueWords = Object.keys(keywords);
 
   const filtered = uniqueWords.filter((word) => {
